@@ -1,0 +1,3 @@
+
+    ebook-convert *.recipe *.mobi
+

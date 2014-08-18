@@ -1,0 +1,32 @@
+from calibre.web.feeds.recipes import BasicNewsRecipe
+
+class Learn_You_a_Haskell_for_Great_Good(BasicNewsRecipe):
+
+    title = 'Learn You a Haskell for Great Good!'
+    description = ''
+    cover_url = 'http://media.nostarch.com/sites/default/files/imagecache/product_full/lyah.png'
+
+    url_prefix = 'http://learnyouahaskell.com/'
+    no_stylesheets = True
+
+    def get_title(self, link):
+        return link.contents[0].strip()
+
+    def parse_index(self):
+        soup = self.index_to_soup(self.url_prefix + 'chapters')
+
+        div = soup.find('ol', { 'class': 'chapters' })
+
+        articles = []
+        for link in div.findAll('li'):
+            page = link.find('a')
+            if '#' in page['href']: continue
+
+            title = self.get_title(page)
+            url = self.url_prefix + page['href']
+            a = { 'title': title, 'url': url }
+            articles.append(a)
+
+        ans = [('Learn You a Haskell for Great Good!', articles)]
+        return ans
+
